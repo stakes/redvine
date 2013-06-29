@@ -70,7 +70,7 @@ describe Redvine do
         expect(vines.first.has_key?('videoUrl')).to be_true
       end
     end
-    
+
   end
 
 
@@ -97,7 +97,14 @@ describe Redvine do
       expect(Redvine.new).to respond_to(:timeline)
     end
 
-    it 'should return a set of results with VideoUrls'
+    it 'should return a set of results with VideoUrls' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vines = client.timeline
+        expect(vines.count).to be > 1
+        expect(vines.first.has_key?('videoUrl')).to be_true
+      end
+    end
 
   end
 

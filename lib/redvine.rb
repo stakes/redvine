@@ -36,7 +36,8 @@ class Redvine
   end
 
   def timeline
-
+    response = HTTParty.get(@@baseUrl + 'timelines/graph', {headers: session_headers})
+    response.parsed_response['data']['records']
   end
 
   def user_profile(uid)
