@@ -21,23 +21,19 @@ class Redvine
 
   def search(tag)
     raise(ArgumentError, 'You must specify a tag') if !tag
-    response = HTTParty.get(@@baseUrl + 'timelines/tags/' + tag, {headers: session_headers})
-    response.parsed_response['data']['records']
+    get_request('timelines/tags/' + tag)
   end
 
   def popular
-    response = HTTParty.get(@@baseUrl + 'timelines/popular', {headers: session_headers})
-    response.parsed_response['data']['records']
+    get_request('timelines/popular')
   end
 
   def promoted
-    response = HTTParty.get(@@baseUrl + 'timelines/promoted', {headers: session_headers})
-    response.parsed_response['data']['records']
+    get_request('timelines/promoted')
   end
 
   def timeline
-    response = HTTParty.get(@@baseUrl + 'timelines/graph', {headers: session_headers})
-    response.parsed_response['data']['records']
+    get_request('timelines/graph')
   end
 
   def user_profile(uid)
@@ -58,6 +54,11 @@ class Redvine
 
   def session_headers
     {'User-Agent' => @@userAgent, 'vine-session-id' => @vine_key}
+  end
+
+  def get_request(endpoint)
+    response = HTTParty.get(@@baseUrl + endpoint, {headers: session_headers})
+    response.parsed_response['data']['records']
   end
 
 end
