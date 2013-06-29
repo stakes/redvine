@@ -1,24 +1,10 @@
 # Redvine
 
-TODO: Write a gem description
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'redvine'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install redvine
+A gem-in-progress that connects to Vine's unofficial API.
 
 ## Usage
 
-TODO: Write usage instructions here
+Really, just don't use it yet.
 
 ## Contributing
 
