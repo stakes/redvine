@@ -10,7 +10,7 @@ class Redvine
   @@userAgent = 'com.vine.iphone/1.01 (unknown, iPhone OS 6.0, iPad, Scale/2.000000) (Redvine)'
 
   def connect(opts={})
-    validate_arguments(opts)
+    validate_connect_args(opts)
     query = {username: opts[:email], password: opts[:password], deviceToken: @@deviceToken}
     headers = {'User-Agent' => @@userAgent}
     response = HTTParty.post(@@baseUrl + 'users/authenticate', {body: query, headers: headers})
@@ -19,10 +19,16 @@ class Redvine
     @user_id = response.parsed_response['data']['userId']
   end
 
+  def search(tag)
+    raise(ArgumentError, 'You must specify a tag') if !tag
+    headers = {'User-Agent' => @@userAgent, 'vine-session-id' => @vine_key}
+    response = HTTParty.get(@@baseUrl + 'timelines/tags/' + tag, {headers: headers})
+    response.parsed_response['data']['records']
+  end
 
 
   private
-  def validate_arguments(opts={})
+  def validate_connect_args(opts={})
     unless opts.has_key?(:email) and opts.has_key?(:email)
       raise(ArgumentError, 'You must specify both :email and :password')
     end
