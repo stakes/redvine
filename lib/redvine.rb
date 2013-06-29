@@ -26,6 +26,26 @@ class Redvine
     response.parsed_response['data']['records']
   end
 
+  def popular
+
+  end
+
+  def promoted
+
+  end
+
+  def timeline
+
+  end
+
+  def user_profile(uid)
+    raise(ArgumentError, 'You must specify a user id') if !uid
+  end
+
+  def user_timeline(uid)
+    raise(ArgumentError, 'You must specify a user id') if !uid
+  end
+
 
   private
   def validate_connect_args(opts={})

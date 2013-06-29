@@ -56,4 +56,68 @@ describe Redvine do
 
   end
 
+  describe '.popular' do
+
+    it 'should respond to a popular method' do
+      expect(Redvine.new).to respond_to(:popular)
+    end
+
+    it 'should return a set of results with VideoUrls'
+
+  end
+
+
+  describe '.promoted' do
+
+    it 'should respond to a promoted method' do
+      expect(Redvine.new).to respond_to(:promoted)
+    end
+
+    it 'should return a set of results with VideoUrls'
+
+  end
+
+  describe '.timeline' do
+
+    it 'should respond to a timeline method' do
+      expect(Redvine.new).to respond_to(:timeline)
+    end
+
+    it 'should return a set of results with VideoUrls'
+
+  end
+
+  describe '.user_profile' do
+
+    it 'should respond to a user_profile method' do
+      expect(Redvine.new).to respond_to(:user_profile)
+    end
+
+    it 'should throw an error without a user id' do
+      client = Redvine.new
+      expect { client.user_profile() }.to raise_error(ArgumentError)
+    end
+
+    it 'should return a user profile given a valid user id'
+
+  end
+
+  describe '.user_timeline' do
+
+    it 'should respond to a user_timeline method' do
+      expect(Redvine.new).to respond_to(:user_timeline)
+    end
+
+    it 'should throw an error without a user id' do
+      client = Redvine.new
+      expect { client.user_timeline() }.to raise_error(ArgumentError)
+    end
+
+    it 'should return a set of results with VideoUrls given a valid user id'
+
+  end
+
+
+
+
 end
