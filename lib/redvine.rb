@@ -21,27 +21,29 @@ class Redvine
 
   def search(tag)
     raise(ArgumentError, 'You must specify a tag') if !tag
-    get_request('timelines/tags/' + tag)
+    get_request_data('timelines/tags/' + tag)
   end
 
   def popular
-    get_request('timelines/popular')
+    get_request_data('timelines/popular')
   end
 
   def promoted
-    get_request('timelines/promoted')
+    get_request_data('timelines/promoted')
   end
 
   def timeline
-    get_request('timelines/graph')
+    get_request_data('timelines/graph')
   end
 
   def user_profile(uid)
     raise(ArgumentError, 'You must specify a user id') if !uid
+    get_request_data('users/profiles/' + uid, false)
   end
 
   def user_timeline(uid)
     raise(ArgumentError, 'You must specify a user id') if !uid
+    get_request_data('timelines/users/' + uid)
   end
 
 
@@ -56,9 +58,9 @@ class Redvine
     {'User-Agent' => @@userAgent, 'vine-session-id' => @vine_key}
   end
 
-  def get_request(endpoint)
+  def get_request_data(endpoint, records=true)
     response = HTTParty.get(@@baseUrl + endpoint, {headers: session_headers})
-    response.parsed_response['data']['records']
+    records ? response.parsed_response['data']['records'] : response.parsed_response['data']
   end
 
 end

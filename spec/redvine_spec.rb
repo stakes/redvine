@@ -119,7 +119,24 @@ describe Redvine do
       expect { client.user_profile() }.to raise_error(ArgumentError)
     end
 
-    it 'should return a user profile given a valid user id'
+    it 'should return a user profile for the authenticated user' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        profile = client.user_profile(client.user_id.to_s)
+        expect(profile.has_key?('username')).to be_true
+        expect(profile.has_key?('username')).to be_true
+      end
+    end
+
+    it 'should return a user profile given a valid user id' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        profile = client.user_profile('914021455983943680')
+        expect(profile.has_key?('userId')).to be_true
+        expect(profile.has_key?('username')).to be_true
+        expect(profile.has_key?('avatarUrl')).to be_true
+      end
+    end
 
   end
 
@@ -134,7 +151,14 @@ describe Redvine do
       expect { client.user_timeline() }.to raise_error(ArgumentError)
     end
 
-    it 'should return a set of results with VideoUrls given a valid user id'
+    it 'should return a set of results with VideoUrls given a valid user id' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vines = client.user_timeline('914021455983943680')
+        expect(vines.count).to be > 1
+        expect(vines.first.has_key?('videoUrl')).to be_true
+      end
+    end
 
   end
 
