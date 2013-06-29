@@ -123,8 +123,9 @@ describe Redvine do
       VCR.use_cassette('redvine', :record => :new_episodes) do
         client = setup_client()
         profile = client.user_profile(client.user_id.to_s)
+        expect(profile.has_key?('userId')).to be_true
         expect(profile.has_key?('username')).to be_true
-        expect(profile.has_key?('username')).to be_true
+        expect(profile.has_key?('avatarUrl')).to be_true
       end
     end
 
