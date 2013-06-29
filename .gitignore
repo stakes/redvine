@@ -19,3 +19,4 @@ tmp
 /.rspec
 .DS_Store
 /config.yml
+/vcr_cassettes/

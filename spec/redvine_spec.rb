@@ -1,5 +1,6 @@
 require 'redvine'
 require 'spec_helper'
+require 'vcr_setup'
 
 include Helpers
 
@@ -17,10 +18,12 @@ describe Redvine do
     end
     
     it 'should connect and return a hash with a :vine_key' do
-      config = get_config()
-      client = Redvine.new
-      client.connect(email: config['email'], password: config['password'])
-      expect(client.vine_key).to be_an_instance_of(String)
+      VCR.use_cassette('redvine') do
+        config = get_config()
+        client = Redvine.new
+        client.connect(email: config['email'], password: config['password'])
+        expect(client.vine_key).to be_an_instance_of(String)
+      end
     end
 
   end
@@ -28,21 +31,27 @@ describe Redvine do
   describe '.search' do
 
     it 'should respond to a search method' do
-      client = setup_client()
-      expect(client).to respond_to(:search)
+      VCR.use_cassette('redvine') do
+        client = setup_client()
+        expect(client).to respond_to(:search)
+      end
     end
 
     it 'should throw an error without a tag' do
-      client = setup_client()
-      expect{ client.search() }.to raise_error(ArgumentError)
+      VCR.use_cassette('redvine') do
+        client = setup_client()
+        expect{ client.search() }.to raise_error(ArgumentError)
+      end
     end
 
     it 'should return a result when searching for a common keyword' do
-      client = setup_client()
-      vines = client.search('cat')
-      expect(vines.count).to be > 1
-      expect(vines.first.has_key?('videoUrl')).to be_true
-      expect(vines.first.has_key?('avatarUrl')).to be_true
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vines = client.search('cat')
+        expect(vines.count).to be > 1
+        expect(vines.first.has_key?('videoUrl')).to be_true
+        expect(vines.first.has_key?('avatarUrl')).to be_true
+      end
     end
 
   end
