@@ -3,6 +3,7 @@ module Helpers
     config = get_config()
     client = Redvine.new
     client.connect(email: config['email'], password: config['password'])
+    client
   end
 
   def get_config

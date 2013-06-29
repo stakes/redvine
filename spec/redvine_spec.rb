@@ -27,19 +27,18 @@ describe Redvine do
 
   describe '.search' do
 
-    before(:each) do
-      client = setup_client()
-    end
-
     it 'should respond to a search method' do
-      expect { client }.to respond_to(:search)
+      client = setup_client()
+      expect(client).to respond_to(:search)
     end
 
     it 'should throw an error without a hashtag' do
-      expect { client.search() }.to raise_error(ArgumentError)
+      client = setup_client()
+      expect(client.search()).to raise_error(ArgumentError)
     end
 
     it 'should return a result when searching for a common keyword' do
+      client = setup_client()
       vines = client.search('cat')
       expect(vines.count).to be > 1
       expect(vines.first.has_key?('videoUrl')).to be_true
