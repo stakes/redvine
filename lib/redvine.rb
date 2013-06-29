@@ -21,17 +21,18 @@ class Redvine
 
   def search(tag)
     raise(ArgumentError, 'You must specify a tag') if !tag
-    headers = {'User-Agent' => @@userAgent, 'vine-session-id' => @vine_key}
-    response = HTTParty.get(@@baseUrl + 'timelines/tags/' + tag, {headers: headers})
+    response = HTTParty.get(@@baseUrl + 'timelines/tags/' + tag, {headers: session_headers})
     response.parsed_response['data']['records']
   end
 
   def popular
-
+    response = HTTParty.get(@@baseUrl + 'timelines/popular', {headers: session_headers})
+    response.parsed_response['data']['records']
   end
 
   def promoted
-
+    response = HTTParty.get(@@baseUrl + 'timelines/promoted', {headers: session_headers})
+    response.parsed_response['data']['records']
   end
 
   def timeline
@@ -52,6 +53,10 @@ class Redvine
     unless opts.has_key?(:email) and opts.has_key?(:email)
       raise(ArgumentError, 'You must specify both :email and :password')
     end
+  end
+
+  def session_headers
+    {'User-Agent' => @@userAgent, 'vine-session-id' => @vine_key}
   end
 
 end
