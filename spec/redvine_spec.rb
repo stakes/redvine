@@ -32,9 +32,9 @@ describe Redvine do
       expect(client).to respond_to(:search)
     end
 
-    it 'should throw an error without a hashtag' do
+    it 'should throw an error without a tag' do
       client = setup_client()
-      expect(client.search()).to raise_error(ArgumentError)
+      expect{ client.search() }.to raise_error(ArgumentError)
     end
 
     it 'should return a result when searching for a common keyword' do
