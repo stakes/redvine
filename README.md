@@ -36,9 +36,10 @@ It pretty much goes without saying that this wasn't authorized by Vine or anyone
     client.popular
     client.promoted
 
-### Things To Do
+## Things To Do
 
 * Learn more about the API responses and objects
+* Response pagination
 * Make it easier to access attributes of common objects (videos and users)
 * Include all of the discovered API endpoints
 
