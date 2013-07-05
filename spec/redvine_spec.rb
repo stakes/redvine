@@ -44,13 +44,13 @@ describe Redvine do
       end
     end
 
-    it 'should return a result when searching for a common keyword' do
+    it 'should return a result set with videoUrls when searching for a common keyword' do
       VCR.use_cassette('redvine', :record => :new_episodes) do
         client = setup_client()
         vines = client.search('cat')
         expect(vines.count).to be > 1
-        expect(vines.first.has_key?('videoUrl')).to be_true
-        expect(vines.first.has_key?('avatarUrl')).to be_true
+        expect(vines.first.videoUrl).to be_an_instance_of(String)
+        expect(vines.last.videoUrl).to be_an_instance_of(String)
       end
     end
 
@@ -67,7 +67,7 @@ describe Redvine do
         client = setup_client()
         vines = client.popular
         expect(vines.count).to be > 1
-        expect(vines.first.has_key?('videoUrl')).to be_true
+        expect(vines.first.videoUrl).to be_an_instance_of(String)
       end
     end
 
@@ -85,7 +85,7 @@ describe Redvine do
         client = setup_client()
         vines = client.promoted
         expect(vines.count).to be > 1
-        expect(vines.first.has_key?('videoUrl')).to be_true
+        expect(vines.first.videoUrl).to be_an_instance_of(String)
       end
     end
 
@@ -102,7 +102,7 @@ describe Redvine do
         client = setup_client()
         vines = client.timeline
         expect(vines.count).to be > 1
-        expect(vines.first.has_key?('videoUrl')).to be_true
+        expect(vines.first.videoUrl).to be_an_instance_of(String)
       end
     end
 
@@ -123,9 +123,9 @@ describe Redvine do
       VCR.use_cassette('redvine', :record => :new_episodes) do
         client = setup_client()
         profile = client.user_profile(client.user_id.to_s)
-        expect(profile.has_key?('userId')).to be_true
-        expect(profile.has_key?('username')).to be_true
-        expect(profile.has_key?('avatarUrl')).to be_true
+        expect(profile.userId).not_to be_nil
+        expect(profile.username).to be_an_instance_of(String)
+        expect(profile.avatarUrl).to be_an_instance_of(String)
       end
     end
 
@@ -133,9 +133,9 @@ describe Redvine do
       VCR.use_cassette('redvine', :record => :new_episodes) do
         client = setup_client()
         profile = client.user_profile('914021455983943680')
-        expect(profile.has_key?('userId')).to be_true
-        expect(profile.has_key?('username')).to be_true
-        expect(profile.has_key?('avatarUrl')).to be_true
+        expect(profile.userId).not_to be_nil
+        expect(profile.username).to be_an_instance_of(String)
+        expect(profile.avatarUrl).to be_an_instance_of(String)
       end
     end
 
@@ -157,13 +157,10 @@ describe Redvine do
         client = setup_client()
         vines = client.user_timeline('914021455983943680')
         expect(vines.count).to be > 1
-        expect(vines.first.has_key?('videoUrl')).to be_true
+        expect(vines.first.videoUrl).to be_an_instance_of(String)
       end
     end
 
   end
-
-
-
 
 end

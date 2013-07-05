@@ -1,4 +1,5 @@
 require 'httparty'
+require 'hashie'
 require 'redvine/version'
 
 class Redvine
@@ -60,7 +61,7 @@ class Redvine
 
   def get_request_data(endpoint, records=true)
     response = HTTParty.get(@@baseUrl + endpoint, {headers: session_headers})
-    records ? response.parsed_response['data']['records'] : response.parsed_response['data']
+    records ? Hashie::Mash.new(response.parsed_response).data.records : Hashie::Mash.new(response.parsed_response).data
   end
 
 end
