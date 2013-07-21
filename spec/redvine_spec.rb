@@ -161,6 +161,14 @@ describe Redvine do
       end
     end
 
+    it 'should not break if an error is returned from Vine' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vines = client.user_timeline('965095451261071400')
+        expect(vines.success).to be_false
+      end
+    end
+
   end
 
 end
