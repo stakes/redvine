@@ -25,16 +25,20 @@ It pretty much goes without saying that this wasn't authorized by Vine or anyone
 
     # Find videos by tag
     client.search('cats')
+    client.search('cats', :page => 2)
 
     # Find user profiles by user ID 
     client.user_profile('908082141764657152')
 
     # Get a user's timeline by their user ID
     client.user_timeline('908082141764657152')
+    client.user_timeline('908082141764657152', :page => 2)
 
     # Get popular and promoted videos
     client.popular
+    client.popular(:page => 2)
     client.promoted
+    client.promoted(:page => 2)
 
 ## Things To Do
 
