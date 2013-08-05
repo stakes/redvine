@@ -54,6 +54,16 @@ describe Redvine do
       end
     end
 
+    it 'should return a second page of results' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vines = client.search('cat')
+        vinesp2 = client.search('cat', :page => 2)
+        expect(vines).to_not equal(vinesp2)
+        expect(vines.first.videoUrl).to_not equal(vinesp2.first.videoUrl)
+      end
+    end
+
   end
 
   describe '.popular' do
@@ -68,6 +78,16 @@ describe Redvine do
         vines = client.popular
         expect(vines.count).to be > 1
         expect(vines.first.videoUrl).to be_an_instance_of(String)
+      end
+    end
+
+    it 'should return a second page of results' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vines = client.popular
+        vinesp2 = client.popular(:page => 2)
+        expect(vines).to_not equal(vinesp2)
+        expect(vines.first.videoUrl).to_not equal(vinesp2.first.videoUrl)
       end
     end
 
@@ -89,6 +109,16 @@ describe Redvine do
       end
     end
 
+    it 'should return a second page of results' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vines = client.promoted
+        vinesp2 = client.promoted(:page => 2)
+        expect(vines).to_not equal(vinesp2)
+        expect(vines.first.videoUrl).to_not equal(vinesp2.first.videoUrl)
+      end
+    end
+
   end
 
   describe '.timeline' do
@@ -103,6 +133,16 @@ describe Redvine do
         vines = client.timeline
         expect(vines.count).to be > 1
         expect(vines.first.videoUrl).to be_an_instance_of(String)
+      end
+    end
+
+    it 'should return a second page of results' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vines = client.timeline()
+        vinesp2 = client.timeline(:page => 2)
+        expect(vines).to_not equal(vinesp2)
+        expect(vines.first.videoUrl).to_not equal(vinesp2.first.videoUrl)
       end
     end
 
@@ -158,6 +198,16 @@ describe Redvine do
         vines = client.user_timeline('914021455983943680')
         expect(vines.count).to be > 1
         expect(vines.first.videoUrl).to be_an_instance_of(String)
+      end
+    end
+
+    it 'should return a second page of results' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vines = client.user_timeline('914021455983943680')
+        vinesp2 = client.user_timeline('914021455983943680', :page => 2)
+        expect(vines).to_not equal(vinesp2)
+        expect(vines.first.videoUrl).to_not equal(vinesp2.first.videoUrl)
       end
     end
 

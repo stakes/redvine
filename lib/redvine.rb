@@ -8,7 +8,7 @@ class Redvine
 
   @@baseUrl = 'https://api.vineapp.com/'
   @@deviceToken = 'Redvine'
-  @@userAgent = 'com.vine.iphone/1.01 (unknown, iPhone OS 6.0, iPad, Scale/2.000000) (Redvine)'
+  @@userAgent = 'iphone/1.3.1 (iPhone; iOS 6.1.3; Scale/2.00) (Redvine)'
 
   def connect(opts={})
     validate_connect_args(opts)
@@ -20,31 +20,31 @@ class Redvine
     @user_id = response.parsed_response['data']['userId']
   end
 
-  def search(tag)
+  def search(tag, opts={})
     raise(ArgumentError, 'You must specify a tag') if !tag
-    get_request_data('timelines/tags/' + tag)
+    get_request_data('timelines/tags/' + tag, opts)
   end
 
-  def popular
-    get_request_data('timelines/popular')
+  def popular(opts={})
+    get_request_data('timelines/popular', opts)
   end
 
-  def promoted
-    get_request_data('timelines/promoted')
+  def promoted(opts={})
+    get_request_data('timelines/promoted', opts)
   end
 
-  def timeline
-    get_request_data('timelines/graph')
+  def timeline(opts={})
+    get_request_data('timelines/graph', opts)
   end
 
   def user_profile(uid)
     raise(ArgumentError, 'You must specify a user id') if !uid
-    get_request_data('users/profiles/' + uid, false)
+    get_request_data('users/profiles/' + uid, {}, false)
   end
 
-  def user_timeline(uid)
+  def user_timeline(uid, opts={})
     raise(ArgumentError, 'You must specify a user id') if !uid
-    get_request_data('timelines/users/' + uid)
+    get_request_data('timelines/users/' + uid, opts)
   end
 
 
@@ -56,11 +56,19 @@ class Redvine
   end
 
   def session_headers
-    {'User-Agent' => @@userAgent, 'vine-session-id' => @vine_key}
+    {
+      'User-Agent' => @@userAgent, 
+      'vine-session-id' => @vine_key,
+      'Accept' => '*/*', 
+      'Accept-Language' => 'en;q=1, fr;q=0.9, de;q=0.8, ja;q=0.7, nl;q=0.6, it;q=0.5'
+    }
   end
 
-  def get_request_data(endpoint, records=true)
-    response = HTTParty.get(@@baseUrl + endpoint, {headers: session_headers})
+  def get_request_data(endpoint, query={}, records=true)
+    query.merge!(:size => 20) if query.has_key?(:page) && !query.has_key?(:size)
+    args = {:headers => session_headers}
+    args.merge!(:query => query) if query != {}
+    response = HTTParty.get(@@baseUrl + endpoint, args)
     if response.parsed_response['success'] == false
       response.parsed_response['error'] = true
       return Hashie::Mash.new(response.parsed_response)
