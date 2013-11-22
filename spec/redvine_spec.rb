@@ -216,6 +216,12 @@ describe Redvine do
         client = setup_client()
         vines = client.user_timeline('965095451261071400')
         expect(vines.success).to be_false
+        vines = client.user_timeline('XXX')
+        expect(vines.success).to be_false
+      end
+    end
+
+  end
       end
     end
 
