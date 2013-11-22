@@ -47,6 +47,12 @@ class Redvine
     get_request_data('timelines/users/' + uid, opts)
   end
 
+  def single_post(pid)
+    raise(ArgumentError, 'You must specify a post id') if !pid
+    response = get_request_data('/timelines/posts/' + pid)
+    return response.kind_of?(Array) ? response.first : response
+  end
+
 
   private
   def validate_connect_args(opts={})
@@ -69,6 +75,7 @@ class Redvine
     args = {:headers => session_headers}
     args.merge!(:query => query) if query != {}
     response = HTTParty.get(@@baseUrl + endpoint, args).parsed_response
+    return Hashie::Mash.new(JSON.parse('{"success": false}')) if response.kind_of?(String) 
     if response['success'] == false
       response['error'] = true
       return Hashie::Mash.new(response)
