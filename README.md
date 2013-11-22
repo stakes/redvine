@@ -39,11 +39,13 @@ It pretty much goes without saying that this wasn't authorized by Vine or anyone
     client.popular(:page => 2)
     client.promoted
     client.promoted(:page => 2)
+    
+    # Get a single video by the post ID
+    client.single_post('1015405623653113856')
 
 ## Things To Do
 
-* Learn more about the API responses and objects
-* Response pagination
+* Twitter authentication
 * Make it easier to access attributes of common objects (videos and users)
 * Include all of the discovered API endpoints
 
