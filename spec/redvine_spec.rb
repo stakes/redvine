@@ -222,6 +222,33 @@ describe Redvine do
     end
 
   end
+
+  describe '.single_post' do
+
+    it 'should respond to a single_post method' do
+      expect(Redvine.new).to respond_to(:single_post)
+    end
+
+    it 'should require a post id as an argument' do
+      client = Redvine.new
+      expect { client.single_post() }.to raise_error(ArgumentError)
+    end
+
+    it 'should return a single media result with a valid post id' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vine = client.single_post('1015405623653113856')
+        expect(vine.videoUrl).to be_an_instance_of(String)
+      end
+    end
+
+    it 'should not break if no post exists with that id' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        vine = client.single_post('397923400300')
+        expect(vine.success).to be_false
+        vine2 = client.single_post('XXX')
+        expect(vine2.success).to be_false
       end
     end
 
