@@ -68,12 +68,12 @@ class Redvine
     query.merge!(:size => 20) if query.has_key?(:page) && !query.has_key?(:size)
     args = {:headers => session_headers}
     args.merge!(:query => query) if query != {}
-    response = HTTParty.get(@@baseUrl + endpoint, args)
-    if response.parsed_response['success'] == false
-      response.parsed_response['error'] = true
-      return Hashie::Mash.new(response.parsed_response)
+    response = HTTParty.get(@@baseUrl + endpoint, args).parsed_response
+    if response['success'] == false
+      response['error'] = true
+      return Hashie::Mash.new(response)
     else
-      records ? Hashie::Mash.new(response.parsed_response).data.records : Hashie::Mash.new(response.parsed_response).data
+      records ? Hashie::Mash.new(response).data.records : Hashie::Mash.new(response).data
     end
   end
 
