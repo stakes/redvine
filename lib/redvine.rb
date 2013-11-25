@@ -37,6 +37,16 @@ class Redvine
     get_request_data('timelines/graph', opts)
   end
 
+  def following(uid,opts={})
+    raise(ArgumentError, 'You must specify a user id') if !uid
+    get_request_data("users/#{uid}/following", opts)
+    end
+
+  def followers(uid,opts={})
+    raise(ArgumentError, 'You must specify a user id') if !uid
+    get_request_data("users/#{uid}/followers", opts)
+  end
+
   def user_profile(uid)
     raise(ArgumentError, 'You must specify a user id') if !uid
     get_request_data('users/profiles/' + uid, {}, false)
@@ -70,11 +80,12 @@ class Redvine
     args.merge!(:query => query) if query != {}
     response = HTTParty.get(@@baseUrl + endpoint, args)
     if response.parsed_response['success'] == false
-      response.parsed_response['error'] = true
-      return Hashie::Mash.new(response.parsed_response)
+      #response.parsed_response['error'] = true
+      #return Hashie::Mash.new(response.parsed_response)
     else
-      records ? Hashie::Mash.new(response.parsed_response).data.records : Hashie::Mash.new(response.parsed_response).data
+      #records ? Hashie::Mash.new(response.parsed_response).data.records : Hashie::Mash.new(response.parsed_response).data
     end
+    return response
   end
 
 end
