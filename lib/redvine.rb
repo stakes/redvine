@@ -4,7 +4,13 @@ require 'redvine/version'
 
 class Redvine
 
-  class Error < StandardError; end
+  class Error < StandardError
+    attr_reader :code
+
+    def initialize(code)
+      @code = code
+    end
+  end
   class ConnectionError < Redvine::Error; end
 
   attr_reader :vine_key, :username, :user_id
@@ -18,12 +24,13 @@ class Redvine
     query = {username: opts[:email], password: opts[:password], deviceToken: @@deviceToken}
     headers = {'User-Agent' => @@userAgent}
     response = HTTParty.post(@@baseUrl + 'users/authenticate', {body: query, headers: headers})
-    if response['success']
+
+    if opts[:skip_exception] || response['success']
       @vine_key = response.parsed_response['data']['key']
       @username = response.parsed_response['data']['username']
       @user_id = response.parsed_response['data']['userId']
     else
-      raise Redvine::ConnectionError, "#{response['code']}: #{response['error']}"
+      raise Redvine::ConnectionError.new(response['code'].to_i), response['error']
     end
   end
 

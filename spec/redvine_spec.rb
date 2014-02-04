@@ -26,11 +26,33 @@ describe Redvine do
       end
     end
 
-    it 'should return a specific error if username/password is incorrect' do
+    it 'should raise a specific error if username/password is incorrect' do
       VCR.use_cassette('redvine_error') do
         config = get_config()
         client = Redvine.new
         expect { client.connect(email: 'fake_email@someplace.net', password: 'nope1nope2nope3') }.to raise_error(Redvine::ConnectionError)
+      end
+    end
+
+    it 'should extract error code and message if username/password is incorrect' do
+      VCR.use_cassette('redvine_error') do
+        config = get_config()
+        client = Redvine.new
+        begin
+          client.connect(email: 'fake_email@someplace.net', password: 'nope1nope2nope3')
+        rescue Redvine::ConnectionError => e
+          expect(e.code).to be_an_instance_of(Fixnum)
+          expect(e.code).to be > 0
+          expect(e.message).to be_an_instance_of(String)
+        end
+      end
+    end
+
+    it 'should not raise if passed skip_exception when username/password is incorrect' do
+      VCR.use_cassette('redvine_error') do
+        config = get_config()
+        client = Redvine.new
+        expect { client.connect(email: 'fake_email@someplace.net', password: 'nope1nope2nope3', skip_exception: true) }.to_not raise_error
       end
     end
 
