@@ -26,6 +26,14 @@ describe Redvine do
       end
     end
 
+    it 'should return a specific error if username/password is incorrect' do
+      VCR.use_cassette('redvine_error') do
+        config = get_config()
+        client = Redvine.new
+        expect { client.connect(email: 'fake_email@someplace.net', password: 'nope1nope2nope3') }.to raise_error(Redvine::ConnectionError)
+      end
+    end
+
   end
 
   describe '.search' do

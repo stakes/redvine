@@ -4,6 +4,9 @@ require 'redvine/version'
 
 class Redvine
 
+  class Error < StandardError; end
+  class ConnectionError < Redvine::Error; end
+
   attr_reader :vine_key, :username, :user_id
 
   @@baseUrl = 'https://api.vineapp.com/'
@@ -15,9 +18,13 @@ class Redvine
     query = {username: opts[:email], password: opts[:password], deviceToken: @@deviceToken}
     headers = {'User-Agent' => @@userAgent}
     response = HTTParty.post(@@baseUrl + 'users/authenticate', {body: query, headers: headers})
-    @vine_key = response.parsed_response['data']['key']
-    @username = response.parsed_response['data']['username']
-    @user_id = response.parsed_response['data']['userId']
+    if response['success']
+      @vine_key = response.parsed_response['data']['key']
+      @username = response.parsed_response['data']['username']
+      @user_id = response.parsed_response['data']['userId']
+    else
+      raise Redvine::ConnectionError, "#{response['code']}: #{response['error']}"
+    end
   end
 
   def search(tag, opts={})
