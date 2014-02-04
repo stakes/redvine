@@ -34,6 +34,10 @@ It pretty much goes without saying that this wasn't authorized by Vine or anyone
     client.user_timeline('908082141764657152')
     client.user_timeline('908082141764657152', :page => 2)
 
+    # Get a user's followers/following by their user ID
+    client.followers('908082141764657152')
+    client.following('908082141764657152', :page => 2)
+
     # Get popular and promoted videos
     client.popular
     client.popular(:page => 2)

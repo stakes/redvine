@@ -223,6 +223,92 @@ describe Redvine do
 
   end
 
+  describe '.following' do
+  
+    it 'should respond to a following method' do
+      expect(Redvine.new).to respond_to(:following)
+    end
+  
+    it 'should throw an error without a user id' do
+      client = Redvine.new
+      expect { client.following() }.to raise_error(ArgumentError)
+    end
+  
+    it 'should return a set of results with avatar and username given a valid user id' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        users = client.following('914021455983943680')
+        expect(users.count).to be > 1
+        expect(users.first.username).to be_an_instance_of(String)
+        expect(users.first.avatarUrl).to be_an_instance_of(String)
+      end
+    end
+  
+    it 'should return a second page of results' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        users = client.following('914021455983943680')
+        usersp2 = client.following('914021455983943680', :page => 2)
+        expect(users).to_not equal(usersp2)
+        expect(users.first.avatarUrl).to_not equal(usersp2.first.avatarUrl)
+      end
+    end
+  
+    it 'should not break if an error is returned from Vine' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        users = client.following('965095451261071400')
+        expect(users.success).to be_false
+        users = client.following('XXX')
+        expect(users.success).to be_false
+      end
+    end
+  
+  end
+
+  describe '.followers' do
+  
+    it 'should respond to a followers method' do
+      expect(Redvine.new).to respond_to(:followers)
+    end
+  
+    it 'should throw an error without a user id' do
+      client = Redvine.new
+      expect { client.followers() }.to raise_error(ArgumentError)
+    end
+  
+    it 'should return a set of results with avatar and username given a valid user id' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        users = client.followers('914021455983943680')
+        expect(users.count).to be > 1
+        expect(users.first.username).to be_an_instance_of(String)
+        expect(users.first.avatarUrl).to be_an_instance_of(String)
+      end
+    end
+  
+    it 'should return a second page of results' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        users = client.followers('914021455983943680')
+        usersp2 = client.followers('914021455983943680', :page => 2)
+        expect(users).to_not equal(usersp2)
+        expect(users.first.avatarUrl).to_not equal(usersp2.first.avatarUrl)
+      end
+    end
+  
+    it 'should not break if an error is returned from Vine' do
+      VCR.use_cassette('redvine', :record => :new_episodes) do
+        client = setup_client()
+        users = client.followers('965095451261071400')
+        expect(users.success).to be_false
+        users = client.followers('XXX')
+        expect(users.success).to be_false
+      end
+    end
+  
+  end
+
   describe '.single_post' do
 
     it 'should respond to a single_post method' do
@@ -237,7 +323,7 @@ describe Redvine do
     it 'should return a single media result with a valid post id' do
       VCR.use_cassette('redvine', :record => :new_episodes) do
         client = setup_client()
-        vine = client.single_post('1015405623653113856')
+        vine = client.single_post('1038918228849876992')
         expect(vine.videoUrl).to be_an_instance_of(String)
       end
     end

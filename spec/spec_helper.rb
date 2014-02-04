@@ -1,3 +1,5 @@
+require 'debugger'
+
 module Helpers
   def setup_client
     config = get_config()
