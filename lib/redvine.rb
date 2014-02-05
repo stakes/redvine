@@ -4,14 +4,20 @@ require 'redvine/version'
 
 class Redvine
 
-  class Error < StandardError
+  class Error < StandardError; end
+  class ConnectionError < Redvine::Error
     attr_reader :code
 
     def initialize(code)
       @code = code
     end
   end
-  class ConnectionError < Redvine::Error; end
+  
+  class AuthenticationRequiredError < Redvine::Error
+    def initialize(msg="You must authenticate as a valid Vine user (call #connect) before accessing other API methods")
+      super(msg)
+    end
+  end
 
   attr_reader :vine_key, :username, :user_id
 
@@ -54,7 +60,7 @@ class Redvine
   def following(uid,opts={})
     raise(ArgumentError, 'You must specify a user id') if !uid
     get_request_data("users/#{uid}/following", opts)
-    end
+  end
 
   def followers(uid,opts={})
     raise(ArgumentError, 'You must specify a user id') if !uid
@@ -95,6 +101,8 @@ class Redvine
   end
 
   def get_request_data(endpoint, query={}, records=true)
+    raise Redvine::AuthenticationRequiredError unless @vine_key
+    
     query.merge!(:size => 20) if query.has_key?(:page) && !query.has_key?(:size)
     args = {:headers => session_headers}
     args.merge!(:query => query) if query != {}
