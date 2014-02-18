@@ -4,6 +4,21 @@ require 'redvine/version'
 
 class Redvine
 
+  class Error < StandardError; end
+  class ConnectionError < Redvine::Error
+    attr_reader :code
+
+    def initialize(code)
+      @code = code
+    end
+  end
+  
+  class AuthenticationRequiredError < Redvine::Error
+    def initialize(msg="You must authenticate as a valid Vine user (call #connect) before accessing other API methods")
+      super(msg)
+    end
+  end
+
   attr_reader :vine_key, :username, :user_id
 
   @@baseUrl = 'https://api.vineapp.com/'
@@ -15,9 +30,14 @@ class Redvine
     query = {username: opts[:email], password: opts[:password], deviceToken: @@deviceToken}
     headers = {'User-Agent' => @@userAgent}
     response = HTTParty.post(@@baseUrl + 'users/authenticate', {body: query, headers: headers})
-    @vine_key = response.parsed_response['data']['key']
-    @username = response.parsed_response['data']['username']
-    @user_id = response.parsed_response['data']['userId']
+
+    if opts[:skip_exception] || response['success']
+      @vine_key = response.parsed_response['data']['key']
+      @username = response.parsed_response['data']['username']
+      @user_id = response.parsed_response['data']['userId']
+    else
+      raise Redvine::ConnectionError.new(response['code'].to_i), response['error']
+    end
   end
 
   def search(tag, opts={})
@@ -35,6 +55,16 @@ class Redvine
 
   def timeline(opts={})
     get_request_data('timelines/graph', opts)
+  end
+
+  def following(uid,opts={})
+    raise(ArgumentError, 'You must specify a user id') if !uid
+    get_request_data("users/#{uid}/following", opts)
+  end
+
+  def followers(uid,opts={})
+    raise(ArgumentError, 'You must specify a user id') if !uid
+    get_request_data("users/#{uid}/followers", opts)
   end
 
   def user_profile(uid)
@@ -71,11 +101,13 @@ class Redvine
   end
 
   def get_request_data(endpoint, query={}, records=true)
+    raise Redvine::AuthenticationRequiredError unless @vine_key
+    
     query.merge!(:size => 20) if query.has_key?(:page) && !query.has_key?(:size)
     args = {:headers => session_headers}
     args.merge!(:query => query) if query != {}
     response = HTTParty.get(@@baseUrl + endpoint, args).parsed_response
-    return Hashie::Mash.new(JSON.parse('{"success": false}')) if response.kind_of?(String) 
+    return Hashie::Mash.new(JSON.parse('{"success": false}')) if response.kind_of?(String)
     if response['success'] == false
       response['error'] = true
       return Hashie::Mash.new(response)
