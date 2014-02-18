@@ -6,6 +6,8 @@ Very heavily inspired by [Vino](https://github.com/tlack/vino), and made possibl
 
 It pretty much goes without saying that this wasn't authorized by Vine or anyone who works at Vine, so don't blame me if you try to use it and Vine gets mad at you. 
 
+Thanks also to [@kdonovan](https://github.com/kdonovan) and [@ruthgsp](https://github.com/ruthgsp) for adding and improving.
+
 ## Installation
 
     gem install redvine
