@@ -58,7 +58,7 @@ class Redvine
   end
 
   def likes(opts={})
-    user_likes(@user_id.to_s)
+    user_likes(@user_id.to_s, opts)
   end
 
   def following(uid,opts={})
