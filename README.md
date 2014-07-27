@@ -31,6 +31,9 @@ Thanks also to [@kdonovan](https://github.com/kdonovan) and [@ruthgsp](https://g
 
     # Find user profiles by user ID 
     client.user_profile('908082141764657152')
+    
+    # Get liked Vines by a user's ID
+    client.user_likes('908082141764657152')
 
     # Get a user's timeline by their user ID
     client.user_timeline('908082141764657152')
