@@ -22,7 +22,7 @@ class Redvine
   attr_reader :vine_key, :username, :user_id
 
   @@baseUrl = 'https://api.vineapp.com/'
-  @@deviceToken = 'Redvine'
+  @@deviceToken = SecureRandom.hex 32
   @@userAgent = 'iphone/1.3.1 (iPhone; iOS 6.1.3; Scale/2.00) (Redvine)'
 
   def connect(opts={})
@@ -30,7 +30,6 @@ class Redvine
     query = {username: opts[:email], password: opts[:password], deviceToken: @@deviceToken}
     headers = {'User-Agent' => @@userAgent}
     response = HTTParty.post(@@baseUrl + 'users/authenticate', {body: query, headers: headers})
-
     if opts[:skip_exception] || response['success']
       @vine_key = response.parsed_response['data']['key']
       @username = response.parsed_response['data']['username']
