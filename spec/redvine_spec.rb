@@ -202,6 +202,26 @@ describe Redvine do
 
     end
 
+    describe '.user_likes' do
+
+      it 'should respond to a user_likes method' do
+        expect(client).to respond_to(:user_likes)
+      end
+
+      it 'should throw an error without a user id' do
+        expect { client.user_likes() }.to raise_error(ArgumentError)
+      end
+
+      it 'should return a set of results with VideoUrls given a user id with some likes' do
+        VCR.use_cassette('redvine', :record => :new_episodes) do
+          vines = client.user_likes('1104962313704103936')
+          expect(vines.count).to be > 0
+          expect(vines.first.videoUrl).to be_an_instance_of(String)
+        end
+      end
+
+    end
+
     describe '.user_timeline' do
 
       it 'should respond to a user_timeline method' do
