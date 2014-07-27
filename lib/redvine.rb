@@ -57,6 +57,10 @@ class Redvine
     get_request_data('timelines/graph', opts)
   end
 
+  def likes(opts={})
+    user_likes(@user_id.to_s, opts)
+  end
+
   def following(uid,opts={})
     raise(ArgumentError, 'You must specify a user id') if !uid
     get_request_data("users/#{uid}/following", opts)
@@ -75,6 +79,11 @@ class Redvine
   def user_timeline(uid, opts={})
     raise(ArgumentError, 'You must specify a user id') if !uid
     get_request_data('timelines/users/' + uid, opts)
+  end
+
+  def user_likes(uid, opts={})
+    raise(ArgumentError, 'You must specify a user id') if !uid
+    get_request_data('timelines/users/' + uid + '/likes', opts)
   end
 
   def single_post(pid)
