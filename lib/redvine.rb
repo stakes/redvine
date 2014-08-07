@@ -94,7 +94,7 @@ class Redvine
 
   private
   def validate_connect_args(opts={})
-    unless opts.has_key?(:email) and opts.has_key?(:email)
+    unless opts.has_key?(:email) and opts.has_key?(:password)
       raise(ArgumentError, 'You must specify both :email and :password')
     end
   end
