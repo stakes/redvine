@@ -72,22 +72,22 @@ class Redvine
 
   def user_profile(uid)
     raise(ArgumentError, 'You must specify a user id') if !uid
-    get_request_data('users/profiles/' + uid, {}, false)
+    get_request_data("users/profiles/#{uid}", {}, false)
   end
 
   def user_timeline(uid, opts={})
     raise(ArgumentError, 'You must specify a user id') if !uid
-    get_request_data('timelines/users/' + uid, opts)
+    get_request_data("timelines/users/#{uid}", opts)
   end
 
   def user_likes(uid, opts={})
     raise(ArgumentError, 'You must specify a user id') if !uid
-    get_request_data('timelines/users/' + uid + '/likes', opts)
+    get_request_data("timelines/users/#{uid}/likes", opts)
   end
 
   def single_post(pid)
     raise(ArgumentError, 'You must specify a post id') if !pid
-    response = get_request_data('/timelines/posts/' + pid)
+    response = get_request_data("/timelines/posts/#{pid}")
     return response.kind_of?(Array) ? response.first : response
   end
 
