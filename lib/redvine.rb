@@ -12,7 +12,7 @@ class Redvine
       @code = code
     end
   end
-  
+
   class AuthenticationRequiredError < Redvine::Error
     def initialize(msg="You must authenticate as a valid Vine user (call #connect) before accessing other API methods")
       super(msg)
@@ -72,22 +72,22 @@ class Redvine
 
   def user_profile(uid)
     raise(ArgumentError, 'You must specify a user id') if !uid
-    get_request_data('users/profiles/' + uid, {}, false)
+    get_request_data("users/profiles/#{uid}", {}, false)
   end
 
   def user_timeline(uid, opts={})
     raise(ArgumentError, 'You must specify a user id') if !uid
-    get_request_data('timelines/users/' + uid, opts)
+    get_request_data("timelines/users/#{uid}", opts)
   end
 
   def user_likes(uid, opts={})
     raise(ArgumentError, 'You must specify a user id') if !uid
-    get_request_data('timelines/users/' + uid + '/likes', opts)
+    get_request_data("timelines/users/#{uid}/likes", opts)
   end
 
   def single_post(pid)
     raise(ArgumentError, 'You must specify a post id') if !pid
-    response = get_request_data('/timelines/posts/' + pid)
+    response = get_request_data("/timelines/posts/#{pid}")
     return response.kind_of?(Array) ? response.first : response
   end
 
@@ -101,16 +101,16 @@ class Redvine
 
   def session_headers
     {
-      'User-Agent' => @@userAgent, 
+      'User-Agent' => @@userAgent,
       'vine-session-id' => @vine_key,
-      'Accept' => '*/*', 
+      'Accept' => '*/*',
       'Accept-Language' => 'en;q=1, fr;q=0.9, de;q=0.8, ja;q=0.7, nl;q=0.6, it;q=0.5'
     }
   end
 
   def get_request_data(endpoint, query={}, records=true)
     raise Redvine::AuthenticationRequiredError unless @vine_key
-    
+
     query.merge!(:size => 20) if query.has_key?(:page) && !query.has_key?(:size)
     args = {:headers => session_headers}
     args.merge!(:query => query) if query != {}
@@ -125,4 +125,3 @@ class Redvine
   end
 
 end
-
