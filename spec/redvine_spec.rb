@@ -270,9 +270,9 @@ describe Redvine do
       it 'should not break if an error is returned from Vine' do
         VCR.use_cassette('redvine', :record => :new_episodes) do
           vines = client.user_timeline('965095451261071400')
-          expect(vines.success).to be_false
+          expect(vines.success).to eq(false)
           vines = client.user_timeline('XXX')
-          expect(vines.success).to be_false
+          expect(vines.success).to eq(false)
         end
       end
 
@@ -315,9 +315,9 @@ describe Redvine do
       it 'should not break if an error is returned from Vine' do
         VCR.use_cassette('redvine', :record => :new_episodes) do
           users = client.following('965095451261071400')
-          expect(users.success).to be_false
+          expect(users.success).to eq(false)
           users = client.following('XXX')
-          expect(users.success).to be_false
+          expect(users.success).to eq(false)
         end
       end
 
@@ -360,9 +360,9 @@ describe Redvine do
       it 'should not break if an error is returned from Vine' do
         VCR.use_cassette('redvine', :record => :new_episodes) do
           users = client.followers('965095451261071400')
-          expect(users.success).to be_false
+          expect(users.success).to eq(false)
           users = client.followers('XXX')
-          expect(users.success).to be_false
+          expect(users.success).to eq(false)
         end
       end
 
@@ -394,9 +394,9 @@ describe Redvine do
       it 'should not break if no post exists with that id' do
         VCR.use_cassette('redvine', :record => :new_episodes) do
           vine = client.single_post('397923400300')
-          expect(vine.success).to be_false
+          expect(vine.success).to eq(false)
           vine2 = client.single_post('XXX')
-          expect(vine2.success).to be_false
+          expect(vine2.success).to eq(false)
         end
       end
     end
