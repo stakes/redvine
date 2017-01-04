@@ -1,5 +1,7 @@
 # Redvine
 
+**[RIP Vine](https://www.wired.com/2016/10/rip-vine/) tho: this is a relic of the past**
+
 A simple Ruby wrapper for the totally unofficial and undocumented [Vine](http://vine.co) API. Everyone loves Vine these days, and [this pretty much sums up why](http://www.youtube.com/watch?v=sdSJ1--kBZ4).
 
 Very heavily inspired by [Vino](https://github.com/tlack/vino), and made possible by the super sleuthing documented on [khakimov.com](http://khakimov.com/blog/2013/03/12/vines-undocumented-api/).
