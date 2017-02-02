@@ -1,6 +1,7 @@
 require 'httparty'
 require 'hashie'
 require 'redvine/version'
+require 'securerandom'
 
 class Redvine
 
